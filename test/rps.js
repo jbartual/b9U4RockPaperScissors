@@ -12,7 +12,6 @@ contract('RPS', function(accounts) {
     })
   });
 
-  /*
   it("Player 1 bets Rock - Player 2 bets Scissors. Player 1 wins", () => {
     console.log ("it: Player 1 bets Rock(0) - Player 2 bets Scissors(1). Player 1 wins");
 
@@ -126,7 +125,7 @@ contract('RPS', function(accounts) {
         console.log ("    Player 2 balance = " + web3.fromWei(web3.eth.getBalance(player2),"ether").toString(10));
     });
   });
-*/
+
   it("Send funds to the contract. Soft Kill it. Get the funds back. Send funds again and get them back automatically", () => {
     console.log("Send funds to the contract. Soft Kill it. Get the funds back. Send funds again and get them back automatically");
 

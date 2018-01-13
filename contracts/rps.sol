@@ -16,7 +16,7 @@ contract RPS {
     enum choices {Rock,Scissors,Paper}
     mapping (address => choices) private playerBets;
 
-    bool isKilled;
+    bool private isKilled;
 
     function RPS(address _player1, address _player2) public {
         owner = msg.sender;
@@ -36,13 +36,20 @@ contract RPS {
     }
 
     function kill() onlyOwner public {
-        isKilled = true;
         selfdestruct(owner);
     }
 
     function softKill() onlyOwner public {
         isKilled = true;
         owner.transfer(this.balance);
+    }
+
+    function softResurrect() onlyOwner public {
+        isKilled = false;
+    }
+
+    function getIsKilled() public returns(bool) {
+        return isKilled;
     }
 
     function () payable public {
@@ -52,20 +59,22 @@ contract RPS {
     }
 
     function bet(uint _bet) onlyPlayers public payable returns(bool) {
-        if (!isKilled) {
+        if (isKilled) {
+            msg.sender.transfer(this.balance); //in case the contract is soft killed return the funds to the sender
+            return false;
+        } else {
             require(msg.value == 0.1 ether); //require the best to be of 0.1 ether
 
             playerBets[msg.sender] = choices(_bet);
             return true;
-        } else {
-            msg.sender.transfer(this.balance); //in case the contract is soft killed return the funds to the sender
-            return false;
         }
     }
 
     function getWinner() onlyOwner public returns(uint, address) {
         uint player;
         address winner;
+
+        require(!isKilled);
 
         choices p1bet = playerBets[player1];
         choices p2bet = playerBets[player2];
@@ -85,6 +94,7 @@ contract RPS {
     }
 
     function payWinner (address _winner) onlyOwner public {
+        require(!isKilled);
         require(_winner == player1 || _winner == player2); //only one of the players can be paid
         require(this.balance > 0);
         _winner.transfer(this.balance);
