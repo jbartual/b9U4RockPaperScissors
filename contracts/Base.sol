@@ -5,8 +5,20 @@ pragma solidity ^0.4.4;
 */
 
 contract Base {
-    address public owner;
-    bool public isPaused;
+    address private owner;
+    bool private isPaused;
+
+    event LogBasePause();
+    event LogBaseResume();
+    event LogBaseRefund(address _address, uint _amount);
+
+    function getOwner() public constant returns (address _owner) {
+        return owner;
+    }
+
+    function getIsPaused() public constant returns (bool _isPaused) {
+        return isPaused;
+    }
 
     function Base() public {
         owner = msg.sender;
@@ -29,20 +41,30 @@ contract Base {
 
     function pause() onlyOwner public {
         isPaused = true;
+        LogBasePause();
     }
 
     function resume() onlyOwner public {
         isPaused = false;
+        LogBaseResume();
     }
 
     function refund(address _address, uint _amount) onlyOwner public returns(bool success) {
         //
         // Function that allows the owner to refund any available amount to any address
         // To be used in case that the contract is paused with funds inside that need to be refunded
+        // Requires:
+        //   - The contract to be paused
+        //   - _amount to be <= this.balance
+        //   - _address not to be 0
         //
-
+        require(isPaused);
         require(_amount <= this.balance);
+        require(_address != address(0));
+
         _address.transfer(_amount);
+
+        LogBaseRefund(_address,_amount);
         return true;
     }
 }
