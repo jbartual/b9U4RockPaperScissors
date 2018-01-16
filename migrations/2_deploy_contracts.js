@@ -1,5 +1,7 @@
-var rps = artifacts.require("./RPS.sol");
+var RPS = artifacts.require("./RPS.sol");
+var Base = artifacts.require("./Base.sol");
 
 module.exports = function(deployer) {
- deployer.deploy(rps);
+    deployer.deploy(Base);
+    deployer.deploy(RPS);
 };

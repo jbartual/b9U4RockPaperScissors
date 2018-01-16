@@ -1,0 +1,93 @@
+{
+  "contract_name": "Base",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "resume",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_address",
+          "type": "address"
+        },
+        {
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "refund",
+      "outputs": [
+        {
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "kill",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "pause",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isPaused",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b61028e8061003c6000396000f3006060604052361561005c5763ffffffff60e060020a600035041663046f7da28114610061578063410085df1461007657806341c0e1b5146100ac5780638456cb59146100c15780638da5cb5b146100d6578063b187bd2614610105575b600080fd5b341561006c57600080fd5b61007461012c565b005b341561008157600080fd5b610098600160a060020a036004351660243561015b565b604051901515815260200160405180910390f35b34156100b757600080fd5b6100746101ca565b005b34156100cc57600080fd5b61007461020e565b005b34156100e157600080fd5b6100e9610243565b604051600160a060020a03909116815260200160405180910390f35b341561011057600080fd5b610098610252565b604051901515815260200160405180910390f35b60005433600160a060020a0390811691161461014757600080fd5b6000805460a060020a60ff02191690555b5b565b6000805433600160a060020a0390811691161461017757600080fd5b600160a060020a0330163182111561018e57600080fd5b600160a060020a03831682156108fc0283604051600060405180830381858888f1935050505015156101bf57600080fd5b5060015b5b92915050565b60005433600160a060020a039081169116146101e557600080fd5b60005460a060020a900460ff1615156101fd57600080fd5b600054600160a060020a0316ff5b5b565b60005433600160a060020a0390811691161461022957600080fd5b6000805460a060020a60ff02191660a060020a1790555b5b565b600054600160a060020a031681565b60005460a060020a900460ff16815600a165627a7a72305820146f68758352a2588cde7288179d0d44c5cfa9680599c042361a753693ca222b0029",
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0xecdd7bc690a29584c7088ce633eda66c726f5a5e",
+      "updated_at": 1516107688539
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1516107688539
+}
