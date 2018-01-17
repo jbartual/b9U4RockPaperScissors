@@ -18,7 +18,6 @@ reduce gas costs as much as you can.
 Rules:
     Rock > Scissors > Paper > Rock
     1       2           3       1
-
  */
 
 contract RPS is Base {
@@ -27,18 +26,19 @@ contract RPS is Base {
     address private winner;
 
     uint private enrolAmount;
-    enum Choices {None, Rock,Scissors,Paper}
+    enum Choices {None,Rock,Scissors,Paper}
 
     struct Player {
         uint enrolFundsReceived; //control that the player has already submitted the enrolAmount
-        Choices bet;
+        mapping (bytes32 => Choices) betHashes;
+        bytes32 bet;
     }
 
     mapping (address => Player) private players;
 
-    function getPlayer (address _player) public constant returns(uint _enrolFundsReceived, uint _bet) {
+    function getPlayer (address _player) public constant returns(uint _enrolFundsReceived, bytes32 _bet) {
         _enrolFundsReceived = players[_player].enrolFundsReceived;
-        _bet = uint(players[_player].bet);
+        _bet = players[_player].bet;
     }
 
     function getEnrolAmount() public constant returns(uint _enrolAmount) {
@@ -53,7 +53,8 @@ contract RPS is Base {
         _;
     }
 
-    event LogRPSNewRPS (address player1, address player2, uint enrolAmount);
+    event LogRPSNewRPS (address _who, address _player1, address _player2, uint _enrolAmount);
+
     function RPS(address _player1, address _player2, uint _enrolAmount) public {
         //require (_player1 != address(0));
         //require (_player2 != address(0));
@@ -63,16 +64,51 @@ contract RPS is Base {
         player2 = _player2;
         enrolAmount = _enrolAmount; //This is the required exact amount to enrol in the game
 
-        LogRPSNewRPS (_player1, _player2, _enrolAmount);
+        LogRPSNewRPS (msg.sender, _player1, _player2, _enrolAmount);
     }
 
-    event LogRPSPlayerEnrol (address player, uint enrolAmount);
-    function enrol() onlyPlayers isNotPaused public payable returns(bool _success) {
+    event LogRPSGetPlayerBets (address _who);
+
+    function getPlayerBets () onlyPlayers isNotPaused public returns (bytes32[] _bets) {
+        //
+        // When a player enrols, the contract sends back an array with hashed bets for that player only
+        // Requires:
+        //  - Only players can execute
+        //  - Contract is not paused
+        //  - The player to have paid the enrol amount
+        //  - The player not to have played already
+        //
+        require(players[msg.sender].enrolFundsReceived == enrolAmount); //require the bet amount has been deposited
+        require(players[msg.sender].bet == 0); //require that the player has not submitted his/her bet yet
+
+        bytes32[] memory bets = new bytes32[](3);
+
+        if (msg.sender == player1) {
+            bets[0] = keccak256(msg.sender, block.difficulty, Choices.Rock);
+            bets[1] = keccak256(msg.sender, block.coinbase, Choices.Paper);
+            bets[2] = keccak256(msg.sender, block.timestamp, Choices.Scissors);
+        } else if (msg.sender == player2) {
+            bets[0] = keccak256(msg.sender, block.coinbase, Choices.Rock);
+            bets[1] = keccak256(msg.sender, block.timestamp, Choices.Paper);
+            bets[2] = keccak256(msg.sender, block.difficulty, Choices.Scissors);
+        }
+
+        players[msg.sender].betHashes[bets[0]] = Choices.Rock;
+        players[msg.sender].betHashes[bets[1]] = Choices.Paper;
+        players[msg.sender].betHashes[bets[2]] = Choices.Scissors;
+
+        LogRPSGetPlayerBets (msg.sender);
+        return bets;
+    }
+
+    event LogRPSPlayerEnrol (address _who, uint _enrolAmount);
+
+    function enrol() onlyPlayers isNotPaused public payable returns(bool success) {
         //
         // To enrol, each player needs to deposit the right Ether amount.
         // Requires:
-        //  - Only players can enrol
-        //  - The contract is not paused
+        //  - Only players can execute
+        //  - Contract is not paused
         //
         require (msg.value == enrolAmount); //Ensure the sent amount matches the bet amount
         require (players[msg.sender].enrolFundsReceived == 0); //Avoid double enrollment
@@ -83,8 +119,9 @@ contract RPS is Base {
         return true;
     }
 
-    event LogRPSPlayerPlay (address player);
-    function play(uint _bet) onlyPlayers isNotPaused public returns(bool _success) {
+    event LogRPSPlayerPlay (address _who);
+
+    function play(bytes32 _bet) onlyPlayers isNotPaused public returns(bool _success) {
         //
         // Function used by the players to play their bets
         // Requires:
@@ -92,41 +129,47 @@ contract RPS is Base {
         //  - Contract is not paused
         //  - The player to have paid the enrol amount
         //  - The player not to have played already. Prevents re-entry and bet updating
+        //  - The sent bet is one of the assigned to the player
         //
         require(players[msg.sender].enrolFundsReceived == enrolAmount); //require the bet amount has been deposited
-        require(players[msg.sender].bet == Choices.None); //require that the player has not submitted his/her bet yet
+        require(players[msg.sender].bet == 0); //require that the player has not submitted his/her bet yet
+        require(uint(players[msg.sender].betHashes[_bet]) != 0); //require that the sent bet is one of the assigned to the player
 
-        players[msg.sender].bet = Choices(_bet);
+        players[msg.sender].bet = _bet;
 
         LogRPSPlayerPlay(msg.sender);
         return true;
     }
 
-    event LogRPSGetWinner (address player);
-    function getWinner() isNotPaused private returns(address _winner) {
+    event LogRPSGetWinner (address _who, address _winner);
+
+    function getWinner() isNotPaused public returns(address _winner) {
         //
-        // PRIVATE
         // Check the submitted bets against the rules.
         // Decide on the winner and mark the winner player.
         // If there is no winner, the owner wins :)
         // Requires:
         //  - Both players to have submitted a bet
         //
-        require (players[player1].bet != Choices.None); //Both players must have played
-        require (players[player2].bet != Choices.None);
+        require (players[player1].bet.length != 0); //Both players must have played
+        require (players[player2].bet.length != 0);
 
-        if ((players[player1].bet == Choices.Rock && players[player2].bet == Choices.Scissors) || (players[player1].bet == Choices.Scissors && players[player2].bet == Choices.Paper) || (players[player1].bet == Choices.Paper && players[player2].bet == Choices.Rock)) {
+        bytes32 betPlayer1 = players[player1].bet;
+        bytes32 betPlayer2 = players[player2].bet;
+
+        if ((players[player1].betHashes[betPlayer1] == Choices.Rock && players[player2].betHashes[betPlayer2] == Choices.Scissors) || (players[player1].betHashes[betPlayer1] == Choices.Scissors && players[player2].betHashes[betPlayer2] == Choices.Paper) || (players[player1].betHashes[betPlayer1] == Choices.Paper && players[player2].betHashes[betPlayer2] == Choices.Rock)) {
             _winner = player1;
-        } else if ((players[player2].bet == Choices.Rock && players[player1].bet == Choices.Scissors) || (players[player2].bet == Choices.Scissors && players[player1].bet == Choices.Paper) || (players[player2].bet == Choices.Paper && players[player1].bet == Choices.Rock)) {
+        } else if ((players[player2].betHashes[betPlayer2] == Choices.Rock && players[player1].betHashes[betPlayer1] == Choices.Scissors) || (players[player2].betHashes[betPlayer2] == Choices.Scissors && players[player1].betHashes[betPlayer1] == Choices.Paper) || (players[player2].betHashes[betPlayer2] == Choices.Paper && players[player1].betHashes[betPlayer1] == Choices.Rock)) {
             _winner = player2;
         } else {
             _winner = getOwner();
         }
 
-        LogRPSGetWinner(_winner);
+        LogRPSGetWinner(msg.sender, _winner);
     }
 
-    event LogRPSPayWinner (address player, uint amount);
+    event LogRPSPayWinner (address _who, address _winner, uint amount);
+
     function payWinner () isNotPaused public returns(address _winner, uint _amount) {
         //
         // Pay the Winner all the accumulated balance.
@@ -142,7 +185,7 @@ contract RPS is Base {
         uint transferAmount = this.balance;
         winner.transfer(transferAmount);
 
-        LogRPSPayWinner (winner, transferAmount);
+        LogRPSPayWinner (msg.sender, winner, transferAmount);
         return (winner, transferAmount);
     }
 }

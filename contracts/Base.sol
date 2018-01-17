@@ -1,16 +1,12 @@
 pragma solidity ^0.4.4;
 
-/*
-    This is the base contract to inherit in all contracts
-*/
+//
+// This is the base contract to inherit in all contracts
+//
 
 contract Base {
     address private owner;
     bool private isPaused;
-
-    event LogBasePause();
-    event LogBaseResume();
-    event LogBaseRefund(address _address, uint _amount);
 
     function getOwner() public constant returns (address _owner) {
         return owner;
@@ -18,10 +14,6 @@ contract Base {
 
     function getIsPaused() public constant returns (bool _isPaused) {
         return isPaused;
-    }
-
-    function Base() public {
-        owner = msg.sender;
     }
 
     modifier onlyOwner() {
@@ -34,20 +26,37 @@ contract Base {
         _;
     }
 
+    event LogBaseNew (address _who);
+
+    function Base() public {
+        owner = msg.sender;
+        LogBaseNew(msg.sender);
+    }
+
+    event LogBaseKill (address _who);
+
     function kill() onlyOwner public {
         require (isPaused); //First pause the contract if you want to kill it forever
+
+        LogBaseKill (msg.sender);
         selfdestruct(owner);
     }
 
+    event LogBasePause(address _who);
+
     function pause() onlyOwner public {
         isPaused = true;
-        LogBasePause();
+        LogBasePause(msg.sender);
     }
+
+    event LogBaseResume(address _who);
 
     function resume() onlyOwner public {
         isPaused = false;
-        LogBaseResume();
+        LogBaseResume(msg.sender);
     }
+
+    event LogBaseRefund(address _who, address _toWho, uint _amount);
 
     function refund(address _address, uint _amount) onlyOwner public returns(bool success) {
         //
@@ -64,7 +73,7 @@ contract Base {
 
         _address.transfer(_amount);
 
-        LogBaseRefund(_address,_amount);
+        LogBaseRefund(msg.sender, _address,_amount);
         return true;
     }
 }
