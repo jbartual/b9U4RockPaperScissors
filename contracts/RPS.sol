@@ -84,13 +84,13 @@ contract RPS is Base {
         bytes32[] memory bets = new bytes32[](3);
 
         if (msg.sender == player1) {
-            bets[0] = keccak256(msg.sender, block.difficulty, Choices.Rock);
-            bets[1] = keccak256(msg.sender, block.coinbase, Choices.Paper);
-            bets[2] = keccak256(msg.sender, block.timestamp, Choices.Scissors);
+            bets[0] = keccak256(msg.sender, msg.data, Choices.Rock);
+            bets[1] = keccak256(msg.sender, msg.data, Choices.Paper);
+            bets[2] = keccak256(msg.sender, msg.data, Choices.Scissors);
         } else if (msg.sender == player2) {
-            bets[0] = keccak256(msg.sender, block.coinbase, Choices.Rock);
-            bets[1] = keccak256(msg.sender, block.timestamp, Choices.Paper);
-            bets[2] = keccak256(msg.sender, block.difficulty, Choices.Scissors);
+            bets[0] = keccak256(msg.sender, msg.data, Choices.Rock);
+            bets[1] = keccak256(msg.sender, msg.data, Choices.Paper);
+            bets[2] = keccak256(msg.sender, msg.data, Choices.Scissors);
         }
 
         players[msg.sender].betHashes[bets[0]] = Choices.Rock;
