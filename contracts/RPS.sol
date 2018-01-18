@@ -46,9 +46,6 @@ contract RPS is Base {
     }
 
     modifier onlyPlayers() {
-        //
-        // Only registered players can execute these functions
-        //
         require (msg.sender == player1 || msg.sender == player2);
         _;
     }
@@ -68,16 +65,13 @@ contract RPS is Base {
     }
 
     event LogRPSGetPlayerBets (address _who);
-
+    // When a player enrols, the contract sends back an array with hashed bets for that player only
+    // Requires:
+    //  - Only players can execute
+    //  - Contract is not paused
+    //  - The player to have paid the enrol amount
+    //  - The player not to have played already
     function getPlayerBets () onlyPlayers isNotPaused public returns (bytes32[] _bets) {
-        //
-        // When a player enrols, the contract sends back an array with hashed bets for that player only
-        // Requires:
-        //  - Only players can execute
-        //  - Contract is not paused
-        //  - The player to have paid the enrol amount
-        //  - The player not to have played already
-        //
         require(players[msg.sender].enrolFundsReceived == enrolAmount); //require the bet amount has been deposited
         require(players[msg.sender].bet == 0); //require that the player has not submitted his/her bet yet
 
@@ -102,14 +96,11 @@ contract RPS is Base {
     }
 
     event LogRPSPlayerEnrol (address _who, uint _enrolAmount);
-
+    // To enrol, each player needs to deposit the right Ether amount.
+    // Requires:
+    //  - Only players can execute
+    //  - Contract is not paused
     function enrol() onlyPlayers isNotPaused public payable returns(bool success) {
-        //
-        // To enrol, each player needs to deposit the right Ether amount.
-        // Requires:
-        //  - Only players can execute
-        //  - Contract is not paused
-        //
         require (msg.value == enrolAmount); //Ensure the sent amount matches the bet amount
         require (players[msg.sender].enrolFundsReceived == 0); //Avoid double enrollment
 
@@ -120,17 +111,14 @@ contract RPS is Base {
     }
 
     event LogRPSPlayerPlay (address _who);
-
+    // Function used by the players to play their bets
+    // Requires:
+    //  - Only players can execute
+    //  - Contract is not paused
+    //  - The player to have paid the enrol amount
+    //  - The player not to have played already. Prevents re-entry and bet updating
+    //  - The sent bet is one of the assigned to the player
     function play(bytes32 _bet) onlyPlayers isNotPaused public returns(bool _success) {
-        //
-        // Function used by the players to play their bets
-        // Requires:
-        //  - Only players can execute
-        //  - Contract is not paused
-        //  - The player to have paid the enrol amount
-        //  - The player not to have played already. Prevents re-entry and bet updating
-        //  - The sent bet is one of the assigned to the player
-        //
         require(players[msg.sender].enrolFundsReceived == enrolAmount); //require the bet amount has been deposited
         require(players[msg.sender].bet == 0); //require that the player has not submitted his/her bet yet
         require(uint(players[msg.sender].betHashes[_bet]) != 0); //require that the sent bet is one of the assigned to the player
@@ -142,15 +130,12 @@ contract RPS is Base {
     }
 
     event LogRPSGetWinner (address _who, address _winner);
-
+    // Check the submitted bets against the rules.
+    // Decide on the winner and mark the winner player.
+    // If there is no winner, the owner wins :)
+    // Requires:
+    //  - Both players to have submitted a bet
     function getWinner() isNotPaused public returns(address _winner) {
-        //
-        // Check the submitted bets against the rules.
-        // Decide on the winner and mark the winner player.
-        // If there is no winner, the owner wins :)
-        // Requires:
-        //  - Both players to have submitted a bet
-        //
         require (players[player1].bet.length != 0); //Both players must have played
         require (players[player2].bet.length != 0);
 
@@ -169,15 +154,12 @@ contract RPS is Base {
     }
 
     event LogRPSPayWinner (address _who, address _winner, uint amount);
-
+    // Pay the Winner all the accumulated balance.
+    // If there is no winner then the owner gets the balance :)
+    // Requires:
+    //  - Contract is not paused
+    //  - That a winner has not been declared already
     function payWinner () isNotPaused public returns(address _winner, uint _amount) {
-        //
-        // Pay the Winner all the accumulated balance.
-        // If there is no winner then the owner gets the balance :)
-        // Requires:
-        //  - Contract is not paused
-        //  - That a winner has not been declared already
-        //
         require(winner == address(0)); //prevent re-entry
 
         winner = getWinner(); //get winner's address and prevent re-entry
