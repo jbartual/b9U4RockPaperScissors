@@ -1,0 +1,1297 @@
+{
+  "contractName": "Stoppable",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "stopContract",
+      "outputs": [
+        {
+          "name": "_success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getNewOwner",
+      "outputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "isStopped",
+      "outputs": [
+        {
+          "name": "_stop",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOwner",
+      "outputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "changeOwner",
+      "outputs": [
+        {
+          "name": "_success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "resumeContract",
+      "outputs": [
+        {
+          "name": "_success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "confirmChangeOwner",
+      "outputs": [
+        {
+          "name": "_success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        }
+      ],
+      "name": "LogStoppableNew",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        }
+      ],
+      "name": "LogStoppableStopContract",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        }
+      ],
+      "name": "LogStoppableResumeContract",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        }
+      ],
+      "name": "LogOwnedNew",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "LogOwnedChangeOwner",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "LogOwnedConfirmChangeOwner",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x6060604052341561000f57600080fd5b336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507f3452aa652f56729b39a9198f36cd36bee3117c0112792f8707bab75d357e66e533604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a17f8cc00c1f028a34a0114cd2b3c9d9cb40bfaaf3412c080091c5ca0db70b09554f33604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a1610799806101246000396000f300606060405260043610610083576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806312253a6c146100885780633e2fe149146100b55780633f683b6a1461010a578063893d20e814610137578063a6f9dae11461018c578063c4bc5da5146101dd578063eae043881461020a575b600080fd5b341561009357600080fd5b61009b610237565b604051808215151515815260200191505060405180910390f35b34156100c057600080fd5b6100c8610318565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561011557600080fd5b61011d610342565b604051808215151515815260200191505060405180910390f35b341561014257600080fd5b61014a610359565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561019757600080fd5b6101c3600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610382565b604051808215151515815260200191505060405180910390f35b34156101e857600080fd5b6101f06104e6565b604051808215151515815260200191505060405180910390f35b341561021557600080fd5b61021d6105c8565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561029457600080fd5b60018060146101000a81548160ff0219169083151502179055507fdc5107df853e31da94e9c53d37f4d2b899e5fb7b6308111493accae88b2659aa33604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a16001905090565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6000600160149054906101000a900460ff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156103df57600080fd5b60008273ffffffffffffffffffffffffffffffffffffffff161415151561040557600080fd5b81600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507fae3fd6fbd4e7d8a4e53ecf89c51f72c00191a8d8d2c2fba3a5f4d9224996a6ae3383604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a160019050919050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561054357600080fd5b6000600160146101000a81548160ff0219169083151502179055507fbe8d7a0d2974b6d29c6b0e1f7199c77822dd586b666191ba97458c086c3d2d6433604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a16001905090565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561062657600080fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550600160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690557f0d58bef243249903c29496d81a7ffbe3f394735e5ccd3e1dabbfec82c635c8d933600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a160019050905600a165627a7a72305820d6fc98d72a13be54f179f8f1ffdcd37abc125254df798bd5c4475eb52121c8e50029",
+  "deployedBytecode": "0x606060405260043610610083576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806312253a6c146100885780633e2fe149146100b55780633f683b6a1461010a578063893d20e814610137578063a6f9dae11461018c578063c4bc5da5146101dd578063eae043881461020a575b600080fd5b341561009357600080fd5b61009b610237565b604051808215151515815260200191505060405180910390f35b34156100c057600080fd5b6100c8610318565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561011557600080fd5b61011d610342565b604051808215151515815260200191505060405180910390f35b341561014257600080fd5b61014a610359565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561019757600080fd5b6101c3600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610382565b604051808215151515815260200191505060405180910390f35b34156101e857600080fd5b6101f06104e6565b604051808215151515815260200191505060405180910390f35b341561021557600080fd5b61021d6105c8565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561029457600080fd5b60018060146101000a81548160ff0219169083151502179055507fdc5107df853e31da94e9c53d37f4d2b899e5fb7b6308111493accae88b2659aa33604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a16001905090565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b6000600160149054906101000a900460ff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16905090565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161415156103df57600080fd5b60008273ffffffffffffffffffffffffffffffffffffffff161415151561040557600080fd5b81600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055507fae3fd6fbd4e7d8a4e53ecf89c51f72c00191a8d8d2c2fba3a5f4d9224996a6ae3383604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a160019050919050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561054357600080fd5b6000600160146101000a81548160ff0219169083151502179055507fbe8d7a0d2974b6d29c6b0e1f7199c77822dd586b666191ba97458c086c3d2d6433604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390a16001905090565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561062657600080fd5b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff166000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550600160006101000a81549073ffffffffffffffffffffffffffffffffffffffff02191690557f0d58bef243249903c29496d81a7ffbe3f394735e5ccd3e1dabbfec82c635c8d933600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff16604051808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020018273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019250505060405180910390a160019050905600a165627a7a72305820d6fc98d72a13be54f179f8f1ffdcd37abc125254df798bd5c4475eb52121c8e50029",
+  "sourceMap": "106:1027:1:-;;;274:90;;;;;;;;377:10:0;369:5;;:18;;;;;;;;;;;;;;;;;;398:23;410:10;398:23;;;;;;;;;;;;;;;;;;;;;;328:28:1;345:10;328:28;;;;;;;;;;;;;;;;;;;;;;106:1027;;;;;;",
+  "deployedSourceMap": "106:1027:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;607:200;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;569:133:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;372:121:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;437:124:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;912:262;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;925:205:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1388:314:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;607:200:1;685:13;215:5:0;;;;;;;;;;;201:19;;:10;:19;;;192:29;;;;;;;;723:4:1;716;;:11;;;;;;;;;;;;;;;;;;740:37;766:10;740:37;;;;;;;;;;;;;;;;;;;;;;795:4;788:11;;607:200;:::o;569:133:0:-;644:17;686:8;;;;;;;;;;;679:15;;569:133;:::o;372:121:1:-;446:10;481:4;;;;;;;;;;;474:11;;372:121;:::o;437:124:0:-;509:14;548:5;;;;;;;;;;;541:12;;437:124;:::o;912:262::-;1004:13;215:5;;;;;;;;;;;201:19;;:10;:19;;;192:29;;;;;;;;1056:1;1043:9;:14;;;;1035:23;;;;;;;;1082:9;1071:8;;:20;;;;;;;;;;;;;;;;;;1102:42;1122:10;1134:9;1102:42;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1162:4;1155:11;;912:262;;;:::o;925:205:1:-;1005:13;215:5:0;;;;;;;;;;;201:19;;:10;:19;;;192:29;;;;;;;;1043:5:1;1036:4;;:12;;;;;;;;;;;;;;;;;;1061:39;1089:10;1061:39;;;;;;;;;;;;;;;;;;;;;;1118:4;1111:11;;925:205;:::o;1388:314:0:-;1451:13;1504:8;;;;;;;;;;;1490:22;;:10;:22;;;1482:31;;;;;;;;1577:8;;;;;;;;;;;1569:5;;:16;;;;;;;;;;;;;;;;;;1603:8;;1596:15;;;;;;;;;;;1624:48;1651:10;1663:8;;;;;;;;;;;1624:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1690:4;1683:11;;1388:314;:::o",
+  "source": "pragma solidity ^0.4.4;\r\n\r\nimport \"./Owned.sol\";\r\n\r\n// Common functions for contracts that are stoppable\r\ncontract Stoppable is Owned {\r\n    bool private stop;\r\n\r\n    modifier onlyIfRunning () { require (!stop); _; }\r\n\r\n        event LogStoppableNew (address _sender);\r\n    function Stoppable ()\r\n        public\r\n    {\r\n        LogStoppableNew (msg.sender);\r\n    }\r\n\r\n    function isStopped ()\r\n        public\r\n        constant\r\n        returns (bool _stop)\r\n    {\r\n        return stop;\r\n    }\r\n\r\n        event LogStoppableStopContract (address _sender);\r\n        // Function to soft stop the contract\r\n    function stopContract ()\r\n        onlyOwner\r\n        public\r\n        returns (bool _success)\r\n    {\r\n        stop = true;\r\n\r\n        LogStoppableStopContract (msg.sender);\r\n        return true;\r\n    }\r\n\r\n        event LogStoppableResumeContract (address _sender);\r\n        // Function to soft resume the contract\r\n    function resumeContract ()\r\n        onlyOwner\r\n        public\r\n        returns (bool _success)\r\n    {\r\n        stop = false;\r\n\r\n        LogStoppableResumeContract (msg.sender);\r\n        return true;\r\n    }\r\n}",
+  "sourcePath": "/home/jordi/b9/Unit4/SP_RPS/contracts/MyShared/Stoppable.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/jordi/b9/Unit4/SP_RPS/contracts/MyShared/Stoppable.sol",
+      "exportedSymbols": {
+        "Stoppable": [
+          203
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.4",
+            ".4"
+          ]
+        },
+        "id": 121,
+        "name": "PragmaDirective",
+        "src": "0:23:1"
+      },
+      {
+        "attributes": {
+          "SourceUnit": 120,
+          "absolutePath": "/home/jordi/b9/Unit4/SP_RPS/contracts/MyShared/Owned.sol",
+          "file": "./Owned.sol",
+          "scope": 204,
+          "symbolAliases": [
+            null
+          ],
+          "unitAlias": ""
+        },
+        "id": 122,
+        "name": "ImportDirective",
+        "src": "27:21:1"
+      },
+      {
+        "attributes": {
+          "contractDependencies": [
+            119
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            203,
+            119
+          ],
+          "name": "Stoppable",
+          "scope": 204
+        },
+        "children": [
+          {
+            "attributes": {
+              "arguments": [
+                null
+              ]
+            },
+            "children": [
+              {
+                "attributes": {
+                  "contractScope": null,
+                  "name": "Owned",
+                  "referencedDeclaration": 119,
+                  "type": "contract Owned"
+                },
+                "id": 123,
+                "name": "UserDefinedTypeName",
+                "src": "128:5:1"
+              }
+            ],
+            "id": 124,
+            "name": "InheritanceSpecifier",
+            "src": "128:5:1"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "name": "stop",
+              "scope": 203,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "bool",
+              "value": null,
+              "visibility": "private"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "name": "bool",
+                  "type": "bool"
+                },
+                "id": 125,
+                "name": "ElementaryTypeName",
+                "src": "141:4:1"
+              }
+            ],
+            "id": 126,
+            "name": "VariableDeclaration",
+            "src": "141:17:1"
+          },
+          {
+            "attributes": {
+              "name": "onlyIfRunning",
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 127,
+                "name": "ParameterList",
+                "src": "190:2:1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_bool",
+                                  "typeString": "bool"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 1144,
+                              "type": "function (bool) pure",
+                              "value": "require"
+                            },
+                            "id": 128,
+                            "name": "Identifier",
+                            "src": "195:7:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "operator": "!",
+                              "prefix": true,
+                              "type": "bool"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 126,
+                                  "type": "bool",
+                                  "value": "stop"
+                                },
+                                "id": 129,
+                                "name": "Identifier",
+                                "src": "205:4:1"
+                              }
+                            ],
+                            "id": 130,
+                            "name": "UnaryOperation",
+                            "src": "204:5:1"
+                          }
+                        ],
+                        "id": 131,
+                        "name": "FunctionCall",
+                        "src": "195:15:1"
+                      }
+                    ],
+                    "id": 132,
+                    "name": "ExpressionStatement",
+                    "src": "195:15:1"
+                  },
+                  {
+                    "id": 133,
+                    "name": "PlaceholderStatement",
+                    "src": "212:1:1"
+                  }
+                ],
+                "id": 134,
+                "name": "Block",
+                "src": "193:23:1"
+              }
+            ],
+            "id": 135,
+            "name": "ModifierDefinition",
+            "src": "167:49:1"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "LogStoppableNew"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "_sender",
+                      "scope": 139,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 136,
+                        "name": "ElementaryTypeName",
+                        "src": "251:7:1"
+                      }
+                    ],
+                    "id": 137,
+                    "name": "VariableDeclaration",
+                    "src": "251:15:1"
+                  }
+                ],
+                "id": 138,
+                "name": "ParameterList",
+                "src": "250:17:1"
+              }
+            ],
+            "id": 139,
+            "name": "EventDefinition",
+            "src": "228:40:1"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": true,
+              "modifiers": [
+                null
+              ],
+              "name": "Stoppable",
+              "payable": false,
+              "scope": 203,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 140,
+                "name": "ParameterList",
+                "src": "293:2:1"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 141,
+                "name": "ParameterList",
+                "src": "317:0:1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 139,
+                              "type": "function (address)",
+                              "value": "LogStoppableNew"
+                            },
+                            "id": 142,
+                            "name": "Identifier",
+                            "src": "328:15:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "sender",
+                              "referencedDeclaration": null,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1141,
+                                  "type": "msg",
+                                  "value": "msg"
+                                },
+                                "id": 143,
+                                "name": "Identifier",
+                                "src": "345:3:1"
+                              }
+                            ],
+                            "id": 144,
+                            "name": "MemberAccess",
+                            "src": "345:10:1"
+                          }
+                        ],
+                        "id": 145,
+                        "name": "FunctionCall",
+                        "src": "328:28:1"
+                      }
+                    ],
+                    "id": 146,
+                    "name": "ExpressionStatement",
+                    "src": "328:28:1"
+                  }
+                ],
+                "id": 147,
+                "name": "Block",
+                "src": "317:47:1"
+              }
+            ],
+            "id": 148,
+            "name": "FunctionDefinition",
+            "src": "274:90:1"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "isStopped",
+              "payable": false,
+              "scope": 203,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 149,
+                "name": "ParameterList",
+                "src": "391:2:1"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_stop",
+                      "scope": 156,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 150,
+                        "name": "ElementaryTypeName",
+                        "src": "446:4:1"
+                      }
+                    ],
+                    "id": 151,
+                    "name": "VariableDeclaration",
+                    "src": "446:10:1"
+                  }
+                ],
+                "id": 152,
+                "name": "ParameterList",
+                "src": "445:12:1"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 152
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "overloadedDeclarations": [
+                            null
+                          ],
+                          "referencedDeclaration": 126,
+                          "type": "bool",
+                          "value": "stop"
+                        },
+                        "id": 153,
+                        "name": "Identifier",
+                        "src": "481:4:1"
+                      }
+                    ],
+                    "id": 154,
+                    "name": "Return",
+                    "src": "474:11:1"
+                  }
+                ],
+                "id": 155,
+                "name": "Block",
+                "src": "463:30:1"
+              }
+            ],
+            "id": 156,
+            "name": "FunctionDefinition",
+            "src": "372:121:1"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "LogStoppableStopContract"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "_sender",
+                      "scope": 160,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 157,
+                        "name": "ElementaryTypeName",
+                        "src": "537:7:1"
+                      }
+                    ],
+                    "id": 158,
+                    "name": "VariableDeclaration",
+                    "src": "537:15:1"
+                  }
+                ],
+                "id": 159,
+                "name": "ParameterList",
+                "src": "536:17:1"
+              }
+            ],
+            "id": 160,
+            "name": "EventDefinition",
+            "src": "505:49:1"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "name": "stopContract",
+              "payable": false,
+              "scope": 203,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 161,
+                "name": "ParameterList",
+                "src": "629:2:1"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_success",
+                      "scope": 179,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 164,
+                        "name": "ElementaryTypeName",
+                        "src": "685:4:1"
+                      }
+                    ],
+                    "id": 165,
+                    "name": "VariableDeclaration",
+                    "src": "685:13:1"
+                  }
+                ],
+                "id": 166,
+                "name": "ParameterList",
+                "src": "684:15:1"
+              },
+              {
+                "attributes": {
+                  "arguments": [
+                    null
+                  ]
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "argumentTypes": null,
+                      "overloadedDeclarations": [
+                        null
+                      ],
+                      "referencedDeclaration": 16,
+                      "type": "modifier ()",
+                      "value": "onlyOwner"
+                    },
+                    "id": 162,
+                    "name": "Identifier",
+                    "src": "641:9:1"
+                  }
+                ],
+                "id": 163,
+                "name": "ModifierInvocation",
+                "src": "641:9:1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 126,
+                              "type": "bool",
+                              "value": "stop"
+                            },
+                            "id": 167,
+                            "name": "Identifier",
+                            "src": "716:4:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "74727565",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "bool",
+                              "type": "bool",
+                              "value": "true"
+                            },
+                            "id": 168,
+                            "name": "Literal",
+                            "src": "723:4:1"
+                          }
+                        ],
+                        "id": 169,
+                        "name": "Assignment",
+                        "src": "716:11:1"
+                      }
+                    ],
+                    "id": 170,
+                    "name": "ExpressionStatement",
+                    "src": "716:11:1"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 160,
+                              "type": "function (address)",
+                              "value": "LogStoppableStopContract"
+                            },
+                            "id": 171,
+                            "name": "Identifier",
+                            "src": "740:24:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "sender",
+                              "referencedDeclaration": null,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1141,
+                                  "type": "msg",
+                                  "value": "msg"
+                                },
+                                "id": 172,
+                                "name": "Identifier",
+                                "src": "766:3:1"
+                              }
+                            ],
+                            "id": 173,
+                            "name": "MemberAccess",
+                            "src": "766:10:1"
+                          }
+                        ],
+                        "id": 174,
+                        "name": "FunctionCall",
+                        "src": "740:37:1"
+                      }
+                    ],
+                    "id": 175,
+                    "name": "ExpressionStatement",
+                    "src": "740:37:1"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 166
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "hexvalue": "74727565",
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "subdenomination": null,
+                          "token": "bool",
+                          "type": "bool",
+                          "value": "true"
+                        },
+                        "id": 176,
+                        "name": "Literal",
+                        "src": "795:4:1"
+                      }
+                    ],
+                    "id": 177,
+                    "name": "Return",
+                    "src": "788:11:1"
+                  }
+                ],
+                "id": 178,
+                "name": "Block",
+                "src": "705:102:1"
+              }
+            ],
+            "id": 179,
+            "name": "FunctionDefinition",
+            "src": "607:200:1"
+          },
+          {
+            "attributes": {
+              "anonymous": false,
+              "name": "LogStoppableResumeContract"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "indexed": false,
+                      "name": "_sender",
+                      "scope": 183,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 180,
+                        "name": "ElementaryTypeName",
+                        "src": "853:7:1"
+                      }
+                    ],
+                    "id": 181,
+                    "name": "VariableDeclaration",
+                    "src": "853:15:1"
+                  }
+                ],
+                "id": 182,
+                "name": "ParameterList",
+                "src": "852:17:1"
+              }
+            ],
+            "id": 183,
+            "name": "EventDefinition",
+            "src": "819:51:1"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "name": "resumeContract",
+              "payable": false,
+              "scope": 203,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 184,
+                "name": "ParameterList",
+                "src": "949:2:1"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "_success",
+                      "scope": 202,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 187,
+                        "name": "ElementaryTypeName",
+                        "src": "1005:4:1"
+                      }
+                    ],
+                    "id": 188,
+                    "name": "VariableDeclaration",
+                    "src": "1005:13:1"
+                  }
+                ],
+                "id": 189,
+                "name": "ParameterList",
+                "src": "1004:15:1"
+              },
+              {
+                "attributes": {
+                  "arguments": [
+                    null
+                  ]
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "argumentTypes": null,
+                      "overloadedDeclarations": [
+                        null
+                      ],
+                      "referencedDeclaration": 16,
+                      "type": "modifier ()",
+                      "value": "onlyOwner"
+                    },
+                    "id": 185,
+                    "name": "Identifier",
+                    "src": "961:9:1"
+                  }
+                ],
+                "id": 186,
+                "name": "ModifierInvocation",
+                "src": "961:9:1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 126,
+                              "type": "bool",
+                              "value": "stop"
+                            },
+                            "id": 190,
+                            "name": "Identifier",
+                            "src": "1036:4:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "66616c7365",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "bool",
+                              "type": "bool",
+                              "value": "false"
+                            },
+                            "id": 191,
+                            "name": "Literal",
+                            "src": "1043:5:1"
+                          }
+                        ],
+                        "id": 192,
+                        "name": "Assignment",
+                        "src": "1036:12:1"
+                      }
+                    ],
+                    "id": 193,
+                    "name": "ExpressionStatement",
+                    "src": "1036:12:1"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 183,
+                              "type": "function (address)",
+                              "value": "LogStoppableResumeContract"
+                            },
+                            "id": 194,
+                            "name": "Identifier",
+                            "src": "1061:26:1"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "sender",
+                              "referencedDeclaration": null,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 1141,
+                                  "type": "msg",
+                                  "value": "msg"
+                                },
+                                "id": 195,
+                                "name": "Identifier",
+                                "src": "1089:3:1"
+                              }
+                            ],
+                            "id": 196,
+                            "name": "MemberAccess",
+                            "src": "1089:10:1"
+                          }
+                        ],
+                        "id": 197,
+                        "name": "FunctionCall",
+                        "src": "1061:39:1"
+                      }
+                    ],
+                    "id": 198,
+                    "name": "ExpressionStatement",
+                    "src": "1061:39:1"
+                  },
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 189
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "hexvalue": "74727565",
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": true,
+                          "lValueRequested": false,
+                          "subdenomination": null,
+                          "token": "bool",
+                          "type": "bool",
+                          "value": "true"
+                        },
+                        "id": 199,
+                        "name": "Literal",
+                        "src": "1118:4:1"
+                      }
+                    ],
+                    "id": 200,
+                    "name": "Return",
+                    "src": "1111:11:1"
+                  }
+                ],
+                "id": 201,
+                "name": "Block",
+                "src": "1025:105:1"
+              }
+            ],
+            "id": 202,
+            "name": "FunctionDefinition",
+            "src": "925:205:1"
+          }
+        ],
+        "id": 203,
+        "name": "ContractDefinition",
+        "src": "106:1027:1"
+      }
+    ],
+    "id": 204,
+    "name": "SourceUnit",
+    "src": "0:1133:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-02-04T10:59:52.512Z"
+}

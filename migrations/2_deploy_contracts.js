@@ -1,7 +1,5 @@
-var RPS = artifacts.require("RPS");
-var Base = artifacts.require("Base");
+var RockPaperScissors = artifacts.require("RockPaperScissors");
 
 module.exports = function(deployer) {
-    deployer.deploy(Base);
-    deployer.deploy(RPS);
+    deployer.deploy(RockPaperScissors);
 };
