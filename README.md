@@ -1,4 +1,6 @@
-#Rock Paper Scissors
+# Rock Paper Scissors
+b9 Lab - Unit 4 - Small Project - Rock Paper Scissors 
+
 You will create a smart contract named RockPaperScissors whereby:
 - Alice and Bob can play the classic rock paper scissors game.
 - to enrol, each player needs to deposit the right Ether amount.
