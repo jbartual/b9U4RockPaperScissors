@@ -49,7 +49,7 @@ SUPPORT functions
 
  */
 
-import "./MyShared/Stoppable.sol"; //inherit the Base contract
+import "./_Stoppable.sol"; //inherit the Base contract
 
 contract RockPaperScissors is Stoppable {
 

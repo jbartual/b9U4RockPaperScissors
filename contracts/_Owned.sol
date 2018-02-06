@@ -1,6 +1,26 @@
 pragma solidity ^0.4.4;
 
-// Common functions for contracts that are Owned
+/* 
+
+  Last update: 2018-02-06
+  Version: 2.0
+
+  Super Contract to add manage the ownership of a contract.
+
+  Modifiers:
+  - onlyOwner
+
+  Core functions:
+  - Constructor
+  - changeOwner
+  - confirmChangeOwner
+
+  Support functions:
+  - getInfoOwner
+  - getInfoNewOwner
+
+*/
+
 contract Owned {
     address private owner;
     address private newOwner;
@@ -10,6 +30,8 @@ contract Owned {
         _;
     }
 
+// CORE functions
+
         event LogOwnedNew (address _sender);
         // Constructor
     function Owned ()
@@ -17,22 +39,6 @@ contract Owned {
     {
         owner = msg.sender;
         LogOwnedNew(msg.sender);
-    }
-
-    function getOwner()
-        public
-        constant
-        returns (address _owner)
-    {
-        return owner;
-    }
-
-    function getNewOwner()
-        public
-        constant
-        returns (address _newOwner)
-    {
-        return newOwner;
     }
 
         event LogOwnedChangeOwner (address _sender, address _newOwner);
@@ -65,4 +71,22 @@ contract Owned {
         LogOwnedConfirmChangeOwner(msg.sender, newOwner);
         return true;
     }
+
+// SUPPORT functions    
+
+    function getInfoOwner()
+        constant
+        public
+        returns (address _owner)
+    {
+        return owner;
+    }
+
+    function getInfoNewOwner()
+        constant
+        public
+        returns (address _newOwner)
+    {
+        return newOwner;
+    }   
 }
